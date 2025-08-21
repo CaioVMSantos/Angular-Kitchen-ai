@@ -1,0 +1,84 @@
+.container {
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    background: #4a3df5;
+    color: white;
+    padding: 10px;
+    text-align: center;
+  }
+
+  :host {
+    display: block;
+    min-height: 100vh; /* ocupa altura da tela toda */
+    background-color: #1a2b5c; /* cor do background */
+  }  
+  
+  .content {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    height: 80vh;
+  }
+  
+  .ingredients {
+    flex: 1;
+    background: #eaffea;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .recipes {
+    flex: 1;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .add-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .create-btn {
+    background: #4a3df5;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .chat-box {
+    background: #eee;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .input-box {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .input-box input {
+    flex: 1;
+    padding: 8px;
+  }
+  
+  .send-btn {
+    background: #4a3df5;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
