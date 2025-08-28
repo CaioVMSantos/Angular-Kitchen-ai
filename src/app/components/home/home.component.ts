@@ -10,7 +10,6 @@ import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
   styleUrls: ['./home.component.css']
 })
 export class RecipeGeneratorComponent {
-
   ingredientsControl = new FormControl('', {
     nonNullable: true,
     validators: [Validators.required]

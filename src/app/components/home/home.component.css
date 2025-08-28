@@ -1,9 +1,11 @@
 
 :host {
   display: block;
-  max-width: 900px;
-  width: 95%;
+  width: 90vw;  
+  height: 90vh;  
+  max-width: none; 
 }
+
 
 .kitchen-ai-container {
   background-color: var(--card-background);
@@ -13,10 +15,12 @@
   display: flex;
   flex-direction: column;
   gap: 30px;
+  height: 100%;  
 }
 
 .header {
   text-align: center;
+  padding-bottom: 50px;
 }
 
 .header h1 {
@@ -35,6 +39,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+  height: 100%;
 }
 
 .card {
@@ -57,7 +62,6 @@
   margin-bottom: 20px;
 }
 
-/* Estilos específicos do card de input */
 .input-card textarea {
   width: 100%;
   padding: 12px;
@@ -67,7 +71,7 @@
   font-size: 1rem;
   resize: vertical;
   background-color: #fff;
-  flex-grow: 1; /* Faz o textarea ocupar o espaço disponível */
+  flex-grow: 1; 
 }
 
 .input-card textarea:focus {
@@ -82,7 +86,6 @@
   margin-top: 10px;
 }
 
-/* Estilos específicos do card de output */
 .output-card button {
   background-color: var(--accent-color);
   color: white;
@@ -127,7 +130,7 @@
   border-radius: 8px;
   padding: 15px;
   flex-grow: 1;
-  white-space: pre-wrap; /* Preserva quebras de linha e espaços */
+  white-space: pre-wrap; 
   font-size: 0.95rem;
   line-height: 1.6;
 }
@@ -136,10 +139,9 @@
   color: var(--secondary-text);
 }
 
-/* Media Query para telas menores (celulares) */
 @media (max-width: 768px) {
   .content-wrapper {
-    grid-template-columns: 1fr; /* Coloca os cards um embaixo do outro */
+    grid-template-columns: 1fr; 
   }
 
   .kitchen-ai-container {
