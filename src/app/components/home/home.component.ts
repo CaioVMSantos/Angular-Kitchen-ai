@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // Mantenha o ReactiveFormsModule e adicione FormBuilder para facilitar a criação de formulários
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MarkdownModule } from 'ngx-markdown';
 
 // Importe seu serviço e seu modelo
 import { ApiService } from '../../services/api.service';
@@ -13,7 +14,7 @@ import { FoodCategory } from '../../models/food-category-enum';
   selector: 'app-home', // O seletor pode ser 'app-home' ou o que você preferir
   standalone: true,
   // Adicione CommonModule e ReactiveFormsModule aos imports do componente
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, MarkdownModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

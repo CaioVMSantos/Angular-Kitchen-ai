@@ -62,7 +62,7 @@
         <h3>Sua Receita</h3>
         <div class="recipe-content">
           @if (generatedRecipe) {
-            <pre>{{ generatedRecipe }}</pre>
+            <markdown [data]="generatedRecipe"></markdown>
           } @else {
             <p class="placeholder-text">A receita gerada com base nos seus alimentos aparecerá aqui...</p>
           }
