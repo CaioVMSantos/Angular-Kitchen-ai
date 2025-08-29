@@ -8,7 +8,7 @@ import { RecipeGeneratorComponent } from './components/home/home.component';
   imports: [RouterOutlet, RecipeGeneratorComponent],
   template: `
   <main>
-    <app-recipe-generator></app-recipe-generator>
+    <app-home></app-home>
   </main>
 `,
 styles: '',

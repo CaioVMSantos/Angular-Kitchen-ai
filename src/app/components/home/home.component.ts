@@ -1,44 +1,120 @@
+import { Component, OnInit } from '@angular/core';
+// Importe o CommonModule para usar diretivas como *ngIf e *ngFor no template
+import { CommonModule } from '@angular/common';
+// Mantenha o ReactiveFormsModule e adicione FormBuilder para facilitar a criação de formulários
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+// Importe seu serviço e seu modelo
+import { ApiService } from '../../services/api.service';
+import { FoodItem } from '../../models/food-item.model';
 
 @Component({
-  selector: 'app-recipe-generator',
+  selector: 'app-home', // O seletor pode ser 'app-home' ou o que você preferir
   standalone: true,
-  imports: [ReactiveFormsModule],
+  // Adicione CommonModule e ReactiveFormsModule aos imports do componente
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class RecipeGeneratorComponent {
-  ingredientsControl = new FormControl('', {
-    nonNullable: true,
-    validators: [Validators.required]
-  });
+export class RecipeGeneratorComponent implements OnInit {
 
+  // --- Propriedades da Classe ---
 
+  // Para a lista de alimentos vinda do backend
+  listaDeAlimentos: FoodItem[] = [];
+
+  // Para o formulário de adição de novos alimentos
+  foodForm: FormGroup;
+
+  // Para a receita gerada pela IA
   generatedRecipe: string = '';
+
+  // Para controlar o estado de "carregando"
   isLoading: boolean = false;
 
-  constructor() { }
+  // --- Construtor ---
 
+  // Injetamos o ApiService para falar com o backend
+  // e o FormBuilder para criar nosso formulário reativo
+  constructor(
+    private apiService: ApiService,
+    private fb: FormBuilder
+  ) {
+    // Inicializamos o formulário reativo aqui
+    this.foodForm = this.fb.group({
+      name: ['', Validators.required],
+      category: [''],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      validity: [null]
+    });
+  }
 
-  generateRecipe(): void {
+  // --- Métodos do Ciclo de Vida ---
 
-    const ingredients = this.ingredientsControl.value;
+  // ngOnInit é executado uma vez quando o componente é iniciado
+  ngOnInit(): void {
+    this.carregarAlimentos();
+  }
 
-    if (this.ingredientsControl.invalid) {
-      this.generatedRecipe = 'Por favor, insira alguns ingredientes para começar.';
+  // --- Métodos para Alimentos (CRUD) ---
+
+  carregarAlimentos(): void {
+    this.isLoading = true;
+    this.apiService.getFoodItems().subscribe({
+      next: (data) => {
+        this.listaDeAlimentos = data;
+        this.isLoading = false;
+        console.log('Alimentos carregados com sucesso!');
+      },
+      error: (err) => {
+        console.error('Erro ao carregar alimentos', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  onAdicionarAlimento(): void {
+    // Verifica se o formulário é válido antes de enviar
+    if (this.foodForm.invalid) {
+      console.log('Formulário inválido');
       return;
     }
 
-    console.log("Ingredientes enviados:", ingredients);
+    this.isLoading = true;
+    // Pega os valores do formulário para enviar à API
+    const novoAlimento: FoodItem = this.foodForm.value;
 
+    this.apiService.createFoodItem(novoAlimento).subscribe({
+      next: () => {
+        console.log('Alimento adicionado com sucesso!');
+        this.foodForm.reset({ quantity: 1 }); // Limpa o formulário
+        this.carregarAlimentos(); // Atualiza a lista na tela
+      },
+      error: (err) => {
+        console.error('Erro ao adicionar alimento', err);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  // --- Método para Gerar Receita ---
+
+  // Este método agora chama o backend de verdade!
+  generateRecipe(): void {
     this.isLoading = true;
     this.generatedRecipe = 'Gerando uma receita deliciosa para você... 🧙‍♂️';
 
-    setTimeout(() => {
-      this.generatedRecipe = `**Frango Grelhado com Arroz e Salada de Tomate**\n\n**Ingredientes:**\n- ${ingredients.replace(/\n/g, '\n- ')}\n\n**Modo de Preparo:**\n1. Tempere o frango com sal, pimenta e alho.\n2. Grelhe o frango em fogo médio até dourar.\n3. Cozinhe o arroz normalmente.\n4. Pique o tomate e a cebola e monte a salada.\n5. Sirva tudo junto. Bom apetite!`;
-      this.isLoading = false;
-    }, 2000);
+    this.apiService.generateRecipe().subscribe({
+      next: (recipe) => {
+        this.generatedRecipe = recipe;
+        this.isLoading = false;
+        console.log('Receita recebida do backend!');
+      },
+      error: (err) => {
+        console.error('Erro ao gerar receita', err);
+        this.generatedRecipe = 'Desculpe, a IA está ocupada e não pôde gerar uma receita agora. Tente mais tarde.';
+        this.isLoading = false;
+      }
+    });
   }
 }

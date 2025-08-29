@@ -1,32 +1,48 @@
 <div class="kitchen-ai-container">
   <header class="header">
-    <h1>KitchenAI</h1>
+    <h1>KitchenAI 🍳</h1>
     <p>Seu assistente pessoal de receitas.</p>
   </header>
 
   <main class="content-wrapper">
     <div class="card input-card">
       <h2>Seus Alimentos</h2>
-      <p class="subtitle">Liste os ingredientes que você tem à mão, um por linha.</p>
+      <p class="subtitle">Adicione os ingredientes que você tem à mão.</p>
 
-      <textarea
-        [formControl]="ingredientsControl"
-        rows="8"
-        placeholder="Ex:&#10;Frango&#10;Arroz&#10;Tomate&#10;Cebola&#10;Queijo mussarela">
-      </textarea>
+      <form [formGroup]="foodForm" (ngSubmit)="onAdicionarAlimento()" class="add-food-form">
+        <input type="text" formControlName="name" placeholder="Nome do Alimento">
+        <input type="number" formControlName="quantity" placeholder="Qtde.">
+        <button type="submit" [disabled]="foodForm.invalid || isLoading">+</button>
+      </form>
 
-      <span class="hint">Dica: Seja específico para melhores resultados!</span>
+      <div class="food-list-area">
+        <div *ngIf="isLoading && listaDeAlimentos.length === 0" class="placeholder-text">
+          Carregando despensa...
+        </div>
+        
+        <ul *ngIf="listaDeAlimentos.length > 0" class="food-list">
+          <li *ngFor="let item of listaDeAlimentos">
+            <span>{{ item.name }} (x{{ item.quantity }})</span>
+            </li>
+        </ul>
+        
+        <p *ngIf="!isLoading && listaDeAlimentos.length === 0" class="placeholder-text">
+          Sua despensa está vazia. Adicione itens acima!
+        </p>
+      </div>
+
+      <span class="hint">Dica: A IA usará esta lista para criar a receita!</span>
     </div>
 
     <div class="card output-card">
       <h2>Gerar Receitas</h2>
       <p class="subtitle">Pronto para a mágica da culinária?</p>
 
-      <button (click)="generateRecipe()" [disabled]="isLoading || ingredientsControl.invalid">
+      <button (click)="generateRecipe()" [disabled]="isLoading || listaDeAlimentos.length === 0">
         @if (isLoading) {
           <span>Gerando...</span>
         } @else {
-          <span>Gerar Receitas com IA</span>
+          <span>Gerar Receitas com IA ✨</span>
         }
       </button>
 
@@ -34,13 +50,12 @@
         <h3>Sua Receita</h3>
         <div class="recipe-content">
           @if (generatedRecipe) {
-            <p [innerText]="generatedRecipe"></p>
+            <pre>{{ generatedRecipe }}</pre>
           } @else {
-            <p class="placeholder-text">A receita gerada aparecerá aqui...</p>
+            <p class="placeholder-text">A receita gerada com base nos seus alimentos aparecerá aqui...</p>
           }
         </div>
       </div>
     </div>
   </main>
 </div>
-
