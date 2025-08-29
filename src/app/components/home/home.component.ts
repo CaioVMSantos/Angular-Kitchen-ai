@@ -7,6 +7,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 // Importe seu serviço e seu modelo
 import { ApiService } from '../../services/api.service';
 import { FoodItem } from '../../models/food-item.model';
+import { FoodCategory } from '../../models/food-category-enum';
 
 @Component({
   selector: 'app-home', // O seletor pode ser 'app-home' ou o que você preferir
@@ -36,6 +37,8 @@ export class RecipeGeneratorComponent implements OnInit {
 
   // Injetamos o ApiService para falar com o backend
   // e o FormBuilder para criar nosso formulário reativo
+  availableCategories: string[] = Object.values(FoodCategory)
+
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder
@@ -43,7 +46,7 @@ export class RecipeGeneratorComponent implements OnInit {
     // Inicializamos o formulário reativo aqui
     this.foodForm = this.fb.group({
       name: ['', Validators.required],
-      category: [''],
+      category: [FoodCategory.CARNE, Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       validity: [null]
     });

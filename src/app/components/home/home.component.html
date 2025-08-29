@@ -1,6 +1,6 @@
 <div class="kitchen-ai-container">
   <header class="header">
-    <h1>KitchenAI 🍳</h1>
+    <h1>KitchenAI 🍴</h1>
     <p>Seu assistente pessoal de receitas.</p>
   </header>
 
@@ -8,13 +8,24 @@
     <div class="card input-card">
       <h2>Seus Alimentos</h2>
       <p class="subtitle">Adicione os ingredientes que você tem à mão.</p>
-
+    
       <form [formGroup]="foodForm" (ngSubmit)="onAdicionarAlimento()" class="add-food-form">
-        <input type="text" formControlName="name" placeholder="Nome do Alimento">
-        <input type="number" formControlName="quantity" placeholder="Qtde.">
-        <button type="submit" [disabled]="foodForm.invalid || isLoading">+</button>
+        <div class="form-row">
+          <input type="text" formControlName="name" placeholder="Nome do Alimento" class="form-input">
+          
+          <div class="input-group"> <select formControlName="category" class="form-select">
+              <option [ngValue]="null" disabled>Categoria</option>
+              <option *ngFor="let cat of availableCategories" [value]="cat">
+                {{ cat }}
+              </option>
+            </select>
+            <input type="number" formControlName="quantity" placeholder="Qtde." class="form-input form-input-small">
+          </div>
+          
+          <button type="submit" [disabled]="foodForm.invalid || isLoading" class="add-button">+</button>
+        </div>
       </form>
-
+    
       <div class="food-list-area">
         <div *ngIf="isLoading && listaDeAlimentos.length === 0" class="placeholder-text">
           Carregando despensa...
@@ -23,6 +34,7 @@
         <ul *ngIf="listaDeAlimentos.length > 0" class="food-list">
           <li *ngFor="let item of listaDeAlimentos">
             <span>{{ item.name }} (x{{ item.quantity }})</span>
+            <span class="item-category">{{ item.category }}</span>
             </li>
         </ul>
         
@@ -30,7 +42,7 @@
           Sua despensa está vazia. Adicione itens acima!
         </p>
       </div>
-
+    
       <span class="hint">Dica: A IA usará esta lista para criar a receita!</span>
     </div>
 
