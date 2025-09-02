@@ -1,50 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-// Importe o CommonModule para usar diretivas como *ngIf e *ngFor no template
 import { CommonModule } from '@angular/common';
-// Mantenha o ReactiveFormsModule e adicione FormBuilder para facilitar a criação de formulários
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
-
-// Importe seu serviço e seu modelo
 import { ApiService } from '../../services/api.service';
 import { FoodItem } from '../../models/food-item.model';
 import { FoodCategory } from '../../models/food-category-enum';
 
 @Component({
-  selector: 'app-home', // O seletor pode ser 'app-home' ou o que você preferir
+  selector: 'app-home',
   standalone: true,
-  // Adicione CommonModule e ReactiveFormsModule aos imports do componente
   imports: [CommonModule, ReactiveFormsModule, MarkdownModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class RecipeGeneratorComponent implements OnInit {
 
-  // --- Propriedades da Classe ---
-
-  // Para a lista de alimentos vinda do backend
   listaDeAlimentos: FoodItem[] = [];
-
-  // Para o formulário de adição de novos alimentos
   foodForm: FormGroup;
-
-  // Para a receita gerada pela IA
   generatedRecipe: string = '';
-
-  // Para controlar o estado de "carregando"
   isLoading: boolean = false;
-
-  // --- Construtor ---
-
-  // Injetamos o ApiService para falar com o backend
-  // e o FormBuilder para criar nosso formulário reativo
   availableCategories: string[] = Object.values(FoodCategory)
 
   constructor(
     private apiService: ApiService,
     private fb: FormBuilder
   ) {
-    // Inicializamos o formulário reativo aqui
     this.foodForm = this.fb.group({
       name: ['', Validators.required],
       category: [FoodCategory.CARNE, Validators.required],
@@ -53,14 +33,9 @@ export class RecipeGeneratorComponent implements OnInit {
     });
   }
 
-  // --- Métodos do Ciclo de Vida ---
-
-  // ngOnInit é executado uma vez quando o componente é iniciado
   ngOnInit(): void {
     this.carregarAlimentos();
   }
-
-  // --- Métodos para Alimentos (CRUD) ---
 
   carregarAlimentos(): void {
     this.isLoading = true;
@@ -78,21 +53,19 @@ export class RecipeGeneratorComponent implements OnInit {
   }
 
   onAdicionarAlimento(): void {
-    // Verifica se o formulário é válido antes de enviar
     if (this.foodForm.invalid) {
       console.log('Formulário inválido');
       return;
     }
 
     this.isLoading = true;
-    // Pega os valores do formulário para enviar à API
     const novoAlimento: FoodItem = this.foodForm.value;
 
     this.apiService.createFoodItem(novoAlimento).subscribe({
       next: () => {
         console.log('Alimento adicionado com sucesso!');
-        this.foodForm.reset({ quantity: 1 }); // Limpa o formulário
-        this.carregarAlimentos(); // Atualiza a lista na tela
+        this.foodForm.reset({ quantity: 1 });
+        this.carregarAlimentos();
       },
       error: (err) => {
         console.error('Erro ao adicionar alimento', err);
@@ -101,9 +74,6 @@ export class RecipeGeneratorComponent implements OnInit {
     });
   }
 
-  // --- Método para Gerar Receita ---
-
-  // Este método agora chama o backend de verdade!
   generateRecipe(): void {
     this.isLoading = true;
     this.generatedRecipe = 'Gerando uma receita deliciosa para você... 🧙‍♂️';
