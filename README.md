@@ -103,10 +103,10 @@ ng e2e
 
 ## Próximos Passos
 
-* [ ] Finalizar o layout inicial da aplicação.
-* [ ] Integrar dados simulados com **mocks** para testar funcionalidades.
-* [ ] Conectar com o **back-end em Java** para buscar receitas reais.
-* [ ] Implementar funcionalidades de **IA** para sugerir receitas com base nos ingredientes.
+* [x] Finalizar o layout inicial da aplicação.
+* [x] Integrar dados simulados com **mocks** para testar funcionalidades.
+* [x] Conectar com o **back-end em Java** para buscar receitas reais.
+* [x] Implementar funcionalidades de **IA** para sugerir receitas com base nos ingredientes.
 * [ ] Adicionar **autenticação e gerenciamento de perfil** do usuário.
 * [ ] Permitir salvar e gerenciar **receitas favoritas**.
 
